@@ -1,13 +1,14 @@
 // lib/screens/home_screen.dart
 
 import 'package:flutter/material.dart';
-// Sesuaikan dengan path file utilitas Anda
 import '../utils/colors.dart';
+
+// Konsistenkan tinggi gambar yang dipakai di dashboard dan card
+const double kDashboardImageHeight = 140.0;
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  // --- Data Dummy Film ---
   final List<Map<String, String>> nowShowingMovies = const [
     {
       'title': 'PREDATOR: BADLANDS',
@@ -64,68 +65,51 @@ class HomeScreen extends StatelessWidget {
       'poster': 'assets/Posters/thewindrises.jpg'
     },
   ];
-  // -----------------------
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Menggunakan SafeArea agar konten tidak tertutup notch atau status bar
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // 1. App Bar Kustom (Lokasi, Notifikasi, Scanner)
               _buildCustomAppBar(context),
               const SizedBox(height: 20),
-
-              // 2. Search Bar
               _buildSearchBar(context),
               const SizedBox(height: 16),
 
-              // Banner
+              // Banner Promo
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.asset(
                     'assets/Posters/StarWars.jpg',
-                    height: 140,
+                    height: kDashboardImageHeight,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      height: 140,
-                      color: kPrimaryDark,
-                      child: const Center(
-                        child: Text('Banner', style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 18),
 
-              // Explore / Now Showing Section
+              const SizedBox(height: 18),
               _buildMovieSectionHeader(context, 'Explore Movies'),
               const SizedBox(height: 12),
               _buildNowShowingList(),
               const SizedBox(height: 20),
 
-              // Upcoming Movies Section
               _buildMovieSectionHeader(context, 'Upcoming Movies'),
               const SizedBox(height: 12),
-              _buildUpcomingMoviesList(),
+              _buildUpcomingMoviesList(context),
               const SizedBox(height: 20),
             ],
           ),
         ),
       ),
-      // 5. Bottom Navigation Bar
       bottomNavigationBar: _buildBottomNavigationBar(context),
     );
   }
-
-  // --- WIDGET PEMBANGUN UTAMA ---
 
   Widget _buildCustomAppBar(BuildContext context) {
     return Padding(
@@ -133,43 +117,34 @@ class HomeScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Kiri: Lokasi dan Slogan
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: const [
               Row(
                 children: [
-                  const Icon(Icons.location_on, color: kAccentColor, size: 20),
-                  const SizedBox(width: 4),
-                  // Dropdown Lokasi
-                  const Text(
-                    'Chennai',
-                    style: TextStyle(
-                        color: kTextColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const Icon(Icons.keyboard_arrow_down,
-                      color: kTextColor, size: 20),
+                  Icon(Icons.location_on, color: kAccentColor, size: 20),
+                  SizedBox(width: 4),
+                  Text('Chennai',
+                      style: TextStyle(
+                          color: kTextColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold)),
+                  Icon(Icons.keyboard_arrow_down, color: kTextColor, size: 20),
                 ],
               ),
-              const Text(
-                'Welcome to Cinemasy',
-                style: TextStyle(color: kTextSecondary, fontSize: 14),
-              ),
+              Text('Welcome to Cinemasy',
+                  style: TextStyle(color: kTextSecondary, fontSize: 14)),
             ],
           ),
-          // Kanan: Ikon
           Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.notifications_none, color: kTextColor),
-                onPressed: () {},
-              ),
+                  onPressed: () {},
+                  icon:
+                      const Icon(Icons.notifications_none, color: kTextColor)),
               IconButton(
-                icon: const Icon(Icons.qr_code_scanner, color: kTextColor),
-                onPressed: () {},
-              ),
+                  onPressed: () {},
+                  icon: const Icon(Icons.qr_code_scanner, color: kTextColor)),
             ],
           ),
         ],
@@ -179,27 +154,21 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildSearchBar(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20.0),
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: kInputFillColor,
-        borderRadius: BorderRadius.circular(10.0),
-      ),
+          color: kInputFillColor, borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
           const Icon(Icons.search, color: kAccentColor),
-          const SizedBox(width: 10),
-          Expanded(
+          const SizedBox(width: 8),
+          const Expanded(
             child: TextField(
-              decoration: const InputDecoration(
-                hintText: 'Search movies or theatres',
-                hintStyle: TextStyle(color: kTextSecondary),
-                border: InputBorder
-                    .none, // Menghilangkan border karena sudah diatur di Container
-                isDense: true, // Mengurangi padding internal TextField
-                contentPadding: EdgeInsets.symmetric(vertical: 8),
-              ),
-              style: const TextStyle(color: kTextColor),
+              decoration: InputDecoration(
+                  hintText: 'Search movies or theatres',
+                  hintStyle: TextStyle(color: kTextSecondary),
+                  border: InputBorder.none),
+              style: TextStyle(color: kTextColor),
             ),
           ),
           const Icon(Icons.mic, color: kAccentColor),
@@ -214,29 +183,24 @@ class HomeScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              color: kTextColor,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Text(title,
+              style: const TextStyle(
+                  color: kTextColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold)),
           TextButton(
-            onPressed: () {},
-            child:
-                const Text('View all', style: TextStyle(color: kAccentColor)),
-          ),
+              onPressed: () {},
+              child: const Text('View all',
+                  style: TextStyle(color: kAccentColor))),
         ],
       ),
     );
   }
 
-  // --- NOW SHOWING (HORIZONTAL LIST) ---
-
   Widget _buildNowShowingList() {
     return SizedBox(
-      height: 280,
+      // Sesuaikan tinggi list agar proporsional dengan tinggi gambar baru
+      height: kDashboardImageHeight + 80,
       child: ListView.builder(
         padding: const EdgeInsets.only(left: 20.0),
         scrollDirection: Axis.horizontal,
@@ -255,7 +219,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Fungsi ini sekarang menerima String untuk rating (karena sudah dikonversi di data dummy)
   Widget _buildMoviePosterCard(String title, String rating, String genre,
       String duration, String posterPath) {
     return Container(
@@ -264,30 +227,20 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Placeholder Poster Film
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Container(
-              height: 200,
+            child: Image.asset(
+              posterPath,
+              height: kDashboardImageHeight,
               width: double.infinity,
-              color: kInputFillColor,
-              child: Image.asset(
-                posterPath,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Center(
-                  child: Text('No Image',
-                      style: const TextStyle(color: kTextSecondary)),
-                ),
-              ),
+              fit: BoxFit.cover,
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            title,
-            style:
-                const TextStyle(color: kTextColor, fontWeight: FontWeight.bold),
-            overflow: TextOverflow.ellipsis,
-          ),
+          Text(title,
+              style: const TextStyle(
+                  color: kTextColor, fontWeight: FontWeight.bold),
+              overflow: TextOverflow.ellipsis),
           Row(
             children: [
               const Icon(Icons.star, color: Colors.yellow, size: 14),
@@ -305,28 +258,38 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // --- UPCOMING MOVIES (GRID LIST) ---
+  Widget _buildUpcomingMoviesList(BuildContext context) {
+    // Hitung childAspectRatio secara dinamis agar tinggi card sesuai
+    // dengan tinggi gambar (`kDashboardImageHeight`) ditambah ruang konten.
+    final screenWidth = MediaQuery.of(context).size.width;
+    const horizontalPadding = 20.0 * 2; // left + right padding dari parent
+    const crossAxisSpacing = 15.0; // sama seperti grid spacing
+    // Lebar item (2 kolom)
+    final itemWidth = (screenWidth - horizontalPadding - crossAxisSpacing) / 2;
+    // Perkiraan tinggi konten di bawah gambar (judul, genre, tombol) — sesuaikan jika perlu
+    const contentHeight = 86.0;
+    final itemHeight = kDashboardImageHeight + contentHeight;
+    final childAspectRatio = itemWidth / itemHeight;
 
-  Widget _buildUpcomingMoviesList() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 15.0,
-          mainAxisSpacing: 15.0,
-          childAspectRatio: 0.75,
+          crossAxisSpacing: crossAxisSpacing,
+          mainAxisSpacing: crossAxisSpacing,
+          childAspectRatio: childAspectRatio,
         ),
         itemCount: upcomingMovies.length,
         itemBuilder: (context, index) {
           final movie = upcomingMovies[index];
           return _buildUpcomingMovieCard(
-            movie['title']! as String,
-            movie['reminder'] as bool,
-            movie['genre']! as String,
-            movie['poster']! as String,
+            movie['title']!,
+            movie['reminder'],
+            movie['genre']!,
+            movie['poster']!,
           );
         },
       ),
@@ -335,84 +298,43 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildUpcomingMovieCard(
       String title, bool isReminderSet, String genre, String posterPath) {
-    return Container(
-      decoration: BoxDecoration(
-        color: kInputFillColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
+    return Card(
+      color: kInputFillColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Placeholder Poster dan Reminder Tag
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(10)),
-                child: Image.asset(
-                  posterPath,
-                  height: 180,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    height: 180,
-                    color: kPrimaryDark,
-                    child: Center(
-                        child: Text('No Image',
-                            style: const TextStyle(color: kTextSecondary))),
-                  ),
-                ),
-              ),
-              // Tag Reminder Set
-              if (isReminderSet)
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.schedule, color: Colors.white, size: 14),
-                        SizedBox(width: 4),
-                        Text('Reminder set',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 12)),
-                      ],
-                    ),
-                  ),
-                ),
-            ],
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+            child: Image.asset(
+              posterPath,
+              height: kDashboardImageHeight,
+              width: double.infinity,
+              fit: BoxFit.cover, // ⭐ Gambar pas dan proporsional
+            ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                      color: kTextColor, fontWeight: FontWeight.bold),
-                  overflow: TextOverflow.ellipsis,
-                ),
+                Text(title,
+                    style: const TextStyle(
+                        color: kTextColor, fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis),
+                const SizedBox(height: 4),
                 Text(genre,
                     style:
                         const TextStyle(color: kTextSecondary, fontSize: 12)),
+                const SizedBox(height: 6),
                 if (!isReminderSet)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: TextButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.schedule, size: 18),
-                      label: const Text('Remind me'),
-                      style: TextButton.styleFrom(
-                          foregroundColor: kAccentColor,
-                          padding: EdgeInsets.zero),
-                    ),
+                  TextButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.schedule, size: 16),
+                    label: const Text('Remind me'),
+                    style: TextButton.styleFrom(
+                        foregroundColor: kAccentColor,
+                        padding: EdgeInsets.zero),
                   ),
               ],
             ),
@@ -422,17 +344,12 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // --- BOTTOM NAVIGATION BAR ---
-
   Widget _buildBottomNavigationBar(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: kInputFillColor, // Latar belakang navigasi
+        color: kInputFillColor,
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.5),
-            blurRadius: 10,
-          ),
+          BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 10)
         ],
       ),
       child: BottomNavigationBar(
@@ -445,21 +362,13 @@ class HomeScreen extends StatelessWidget {
         showUnselectedLabels: true,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.movie_filter_rounded),
-            label: 'Movies',
-          ),
+              icon: Icon(Icons.movie_filter_rounded), label: 'Movies'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.theaters_rounded),
-            label: 'Theatres',
-          ),
+              icon: Icon(Icons.theaters_rounded), label: 'Theatres'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark_border),
-            label: 'Saved',
-          ),
+              icon: Icon(Icons.bookmark_border), label: 'Saved'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Profile',
-          ),
+              icon: Icon(Icons.person_outline), label: 'Profile'),
         ],
       ),
     );
