@@ -1,9 +1,6 @@
-// lib/screens/home_screen.dart
-
 import 'package:flutter/material.dart';
 import '../utils/colors.dart';
 
-// Konsistenkan tinggi gambar yang dipakai di dashboard dan card
 const double kDashboardImageHeight = 140.0;
 
 class HomeScreen extends StatelessWidget {
@@ -16,8 +13,6 @@ class HomeScreen extends StatelessWidget {
       'genre': 'Action',
       'duration': '2h 15m',
       'poster': 'assets/Posters/inception.jpg',
-      'date': '05 Nov 2025',
-      'likes': '132'
     },
     {
       'title': 'THE FIRST RIDE',
@@ -25,8 +20,6 @@ class HomeScreen extends StatelessWidget {
       'genre': 'Drama',
       'duration': '2h 12m',
       'poster': 'assets/Posters/Interstellar.jpg',
-      'date': '07 Nov 2025',
-      'likes': '189'
     },
     {
       'title': 'AMALA',
@@ -34,8 +27,6 @@ class HomeScreen extends StatelessWidget {
       'genre': 'Action',
       'duration': '2h 12m',
       'poster': 'assets/Posters/marvel.jpg',
-      'date': '10 Nov 2025',
-      'likes': '98'
     },
   ];
 
@@ -44,24 +35,29 @@ class HomeScreen extends StatelessWidget {
       'title': 'Vaathi',
       'reminder': true,
       'genre': 'Action · Thriller',
+      'description':
+          'Seorang guru melawan ketidakadilan dalam sistem pendidikan.',
       'poster': 'assets/Posters/mulan.jpg'
     },
     {
       'title': 'Shehzada',
       'reminder': false,
       'genre': 'Action · Comedy',
+      'description': 'Seorang pria mengetahui rahasia masa lalunya yang rumit.',
       'poster': 'assets/Posters/StarWars.jpg'
     },
     {
       'title': 'New Film Title',
       'reminder': true,
       'genre': 'Drama',
+      'description': 'Sebuah perjalanan emosional penuh konflik batin.',
       'poster': 'assets/Posters/thelastofus.jpg'
     },
     {
       'title': 'Another Film',
       'reminder': false,
       'genre': 'Sci-Fi',
+      'description': 'Dunia masa depan penuh misteri dan teknologi.',
       'poster': 'assets/Posters/thewindrises.jpg'
     },
   ];
@@ -73,17 +69,15 @@ class HomeScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildCustomAppBar(context),
+            children: [
+              _buildCustomAppBar(),
               const SizedBox(height: 20),
-              _buildSearchBar(context),
+              _buildSearchBar(),
               const SizedBox(height: 16),
-
-              // Banner Promo
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                   child: Image.asset(
                     'assets/Posters/StarWars.jpg',
                     height: kDashboardImageHeight,
@@ -92,251 +86,249 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
-              const SizedBox(height: 18),
-              _buildMovieSectionHeader(context, 'Explore Movies'),
-              const SizedBox(height: 12),
+              const SizedBox(height: 20),
+              _buildSectionTitle('Now Showing'),
+              const SizedBox(height: 10),
               _buildNowShowingList(),
-              const SizedBox(height: 20),
-
-              _buildMovieSectionHeader(context, 'Upcoming Movies'),
-              const SizedBox(height: 12),
-              _buildUpcomingMoviesList(context),
-              const SizedBox(height: 20),
+              const SizedBox(height: 25),
+              _buildSectionTitle('Upcoming Movies'),
+              const SizedBox(height: 10),
+              _buildUpcomingMoviesList(),
+              const SizedBox(height: 30),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(context),
+      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
-  Widget _buildCustomAppBar(BuildContext context) {
+  Widget _buildCustomAppBar() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Row(
-                children: [
-                  Icon(Icons.location_on, color: kAccentColor, size: 20),
-                  SizedBox(width: 4),
-                  Text('Chennai',
-                      style: TextStyle(
-                          color: kTextColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold)),
-                  Icon(Icons.keyboard_arrow_down, color: kTextColor, size: 20),
-                ],
-              ),
-              Text('Welcome to Cinemasy',
-                  style: TextStyle(color: kTextSecondary, fontSize: 14)),
-            ],
-          ),
-          Row(
-            children: [
-              IconButton(
-                  onPressed: () {},
-                  icon:
-                      const Icon(Icons.notifications_none, color: kTextColor)),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.qr_code_scanner, color: kTextColor)),
-            ],
-          ),
+        children: const [
+          Text('Welcome to Cinemasy',
+              style: TextStyle(
+                  color: kTextColor,
+                  fontSize: 19,
+                  fontWeight: FontWeight.bold)),
+          Icon(Icons.notifications_none, color: kTextColor)
         ],
       ),
     );
   }
 
-  Widget _buildSearchBar(BuildContext context) {
+  Widget _buildSearchBar() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-          color: kInputFillColor, borderRadius: BorderRadius.circular(10)),
+        color: kInputFillColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Row(
-        children: [
-          const Icon(Icons.search, color: kAccentColor),
-          const SizedBox(width: 8),
-          const Expanded(
+        children: const [
+          Icon(Icons.search, color: kAccentColor),
+          SizedBox(width: 8),
+          Expanded(
             child: TextField(
               decoration: InputDecoration(
-                  hintText: 'Search movies or theatres',
-                  hintStyle: TextStyle(color: kTextSecondary),
-                  border: InputBorder.none),
+                hintText: 'Search movies...',
+                border: InputBorder.none,
+                hintStyle: TextStyle(color: kTextSecondary),
+              ),
               style: TextStyle(color: kTextColor),
             ),
           ),
-          const Icon(Icons.mic, color: kAccentColor),
         ],
       ),
     );
   }
 
-  Widget _buildMovieSectionHeader(BuildContext context, String title) {
+  Widget _buildSectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title,
-              style: const TextStyle(
-                  color: kTextColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold)),
-          TextButton(
-              onPressed: () {},
-              child: const Text('View all',
-                  style: TextStyle(color: kAccentColor))),
-        ],
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Text(title,
+          style: const TextStyle(
+              color: kTextColor, fontSize: 20, fontWeight: FontWeight.bold)),
     );
   }
 
   Widget _buildNowShowingList() {
     return SizedBox(
-      // Sesuaikan tinggi list agar proporsional dengan tinggi gambar baru
       height: kDashboardImageHeight + 80,
       child: ListView.builder(
-        padding: const EdgeInsets.only(left: 20.0),
+        padding: const EdgeInsets.only(left: 20),
         scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: nowShowingMovies.length,
         itemBuilder: (context, index) {
           final movie = nowShowingMovies[index];
-          return _buildMoviePosterCard(
-            movie['title']!,
-            movie['rating']!,
-            movie['genre']!,
-            movie['duration']!,
-            movie['poster']!,
+          return Container(
+            width: 150,
+            margin: const EdgeInsets.only(right: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    movie['poster']!,
+                    height: kDashboardImageHeight,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(movie['title']!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        color: kTextColor, fontWeight: FontWeight.bold)),
+                Text("${movie['genre']} • ${movie['duration']}",
+                    style:
+                        const TextStyle(color: kTextSecondary, fontSize: 12)),
+              ],
+            ),
           );
         },
       ),
     );
   }
 
-  Widget _buildMoviePosterCard(String title, String rating, String genre,
-      String duration, String posterPath) {
-    return Container(
-      width: 150,
-      margin: const EdgeInsets.only(right: 15.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
-              posterPath,
-              height: kDashboardImageHeight,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(title,
-              style: const TextStyle(
-                  color: kTextColor, fontWeight: FontWeight.bold),
-              overflow: TextOverflow.ellipsis),
-          Row(
-            children: [
-              const Icon(Icons.star, color: Colors.yellow, size: 14),
-              const SizedBox(width: 4),
-              Text(rating, style: const TextStyle(color: kTextSecondary)),
-              const Spacer(),
-              Text('U · $duration',
-                  style: const TextStyle(color: kTextSecondary)),
-            ],
-          ),
-          Text(genre,
-              style: const TextStyle(color: kTextSecondary, fontSize: 12)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildUpcomingMoviesList(BuildContext context) {
-    // Hitung childAspectRatio secara dinamis agar tinggi card sesuai
-    // dengan tinggi gambar (`kDashboardImageHeight`) ditambah ruang konten.
-    final screenWidth = MediaQuery.of(context).size.width;
-    const horizontalPadding = 20.0 * 2; // left + right padding dari parent
-    const crossAxisSpacing = 15.0; // sama seperti grid spacing
-    // Lebar item (2 kolom)
-    final itemWidth = (screenWidth - horizontalPadding - crossAxisSpacing) / 2;
-    // Perkiraan tinggi konten di bawah gambar (judul, genre, tombol) — sesuaikan jika perlu
-    const contentHeight = 86.0;
-    final itemHeight = kDashboardImageHeight + contentHeight;
-    final childAspectRatio = itemWidth / itemHeight;
-
+  Widget _buildUpcomingMoviesList() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: crossAxisSpacing,
-          mainAxisSpacing: crossAxisSpacing,
-          childAspectRatio: childAspectRatio,
+          crossAxisSpacing: 15,
+          mainAxisSpacing: 15,
+          childAspectRatio: 0.65,
         ),
         itemCount: upcomingMovies.length,
         itemBuilder: (context, index) {
           final movie = upcomingMovies[index];
-          return _buildUpcomingMovieCard(
-            movie['title']!,
-            movie['reminder'],
-            movie['genre']!,
-            movie['poster']!,
-          );
+          return _buildUpcomingMovieCard(movie);
         },
       ),
     );
   }
 
-  Widget _buildUpcomingMovieCard(
-      String title, bool isReminderSet, String genre, String posterPath) {
-    return Card(
-      color: kInputFillColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  Widget _buildUpcomingMovieCard(Map<String, dynamic> movie) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
+          // Gambar Poster - Fixed Height
           ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.asset(
-              posterPath,
-              height: kDashboardImageHeight,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+            child: SizedBox(
+              height: 160,
               width: double.infinity,
-              fit: BoxFit.cover, // ⭐ Gambar pas dan proporsional
+              child: Image.asset(
+                movie['poster'],
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
+
+          // Konten Info Film
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Judul Film
+                  Text(
+                    movie['title'],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                        color: kTextColor, fontWeight: FontWeight.bold),
-                    overflow: TextOverflow.ellipsis),
-                const SizedBox(height: 4),
-                Text(genre,
-                    style:
-                        const TextStyle(color: kTextSecondary, fontSize: 12)),
-                const SizedBox(height: 6),
-                if (!isReminderSet)
-                  TextButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.schedule, size: 16),
-                    label: const Text('Remind me'),
-                    style: TextButton.styleFrom(
-                        foregroundColor: kAccentColor,
-                        padding: EdgeInsets.zero),
+                      color: Colors.black87,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-              ],
+                  const SizedBox(height: 3),
+
+                  // Genre
+                  Text(
+                    movie['genre'],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 10,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+
+                  // Deskripsi
+                  Expanded(
+                    child: Text(
+                      movie['description'],
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.grey[700],
+                        fontSize: 10,
+                        height: 1.3,
+                      ),
+                    ),
+                  ),
+
+                  // Bookmark Button di pojok kanan bawah
+                  const SizedBox(height: 4),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          print('Bookmark clicked for ${movie['title']}');
+                        },
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: kAccentColor,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            movie['reminder']
+                                ? Icons.bookmark
+                                : Icons.bookmark_border,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -344,33 +336,18 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNavigationBar(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: kInputFillColor,
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 10)
-        ],
-      ),
-      child: BottomNavigationBar(
-        backgroundColor: Colors.transparent,
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
-        selectedItemColor: kAccentColor,
-        unselectedItemColor: kTextSecondary,
-        currentIndex: 0,
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.movie_filter_rounded), label: 'Movies'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.theaters_rounded), label: 'Theatres'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_border), label: 'Saved'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline), label: 'Profile'),
-        ],
-      ),
+  Widget _buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      selectedItemColor: kAccentColor,
+      unselectedItemColor: kTextSecondary,
+      type: BottomNavigationBarType.fixed,
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.movie), label: "Movies"),
+        BottomNavigationBarItem(icon: Icon(Icons.theaters), label: "Theatres"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.bookmark_border), label: "Saved"),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+      ],
     );
   }
 }
